@@ -1,17 +1,33 @@
-from flask import Flask, render_template, request, jsonify
-from chatbot import analyze_sentiment
+from flask import Flask, render_template, request
+import openai
+import os
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+# Set your OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")  # safer for deployment
 
-@app.route("/chat", methods=["POST"])
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/chat', methods=['POST'])
 def chat():
-    user_msg = request.json["message"]
-    bot_reply = analyze_sentiment(user_msg)
-    return jsonify({"reply": bot_reply})
+    user_input = request.form['message']
 
-if __name__ == "__main__":
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful and empathetic mental health chatbot."},
+                {"role": "user", "content": user_input}
+            ]
+        )
+        bot_reply = response['choices'][0]['message']['content'].strip()
+    except Exception as e:
+        bot_reply = "Sorry, I couldn't respond at the moment."
+
+    return {'reply': bot_reply}
+
+if __name__ == '__main__':
     app.run(debug=True)
