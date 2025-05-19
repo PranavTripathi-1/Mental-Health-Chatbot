@@ -1,0 +1,25 @@
+body {
+    font-family: Arial;
+    background-color: #f0f8ff;
+    text-align: center;
+    padding: 20px;
+  }
+  #chatbox {
+    border: 1px solid #ccc;
+    width: 60%;
+    height: 300px;
+    margin: auto;
+    overflow-y: scroll;
+    background: #fff;
+    padding: 10px;
+  }
+  input {
+    width: 300px;
+    padding: 10px;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+  }
+ 
